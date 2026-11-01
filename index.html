@@ -67,7 +67,7 @@ function reset(){bird={y:220,v:0};pipes=[];score=0}reset();
 let GAP=110,SP=2;const PW=48,GY=H-64;
 function flap(){if(paused)return;if(state=='start'){state='play';reset()}if(state=='play'){bird.v=-6.2;sfx('flap')}else if(state=='over'&&fr>30){state='start';reset()}}
 addEventListener('keydown',e=>{if(e.code=='Space'||e.code=='ArrowUp'){e.preventDefault();flap()}});
-c.addEventListener('pointerdown',e=>{e.preventDefault();flap()});document.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
+c.addEventListener('pointerdown',e=>{e.preventDefault();flap()});document.addEventListener('touchstart',e=>{if(!(e.target.closest&&e.target.closest('button,.panel,#set,#nav')))e.preventDefault()},{passive:false});
 function txt(s,X,Y,sz,col='#fff'){x.font='bold '+sz+'px monospace';x.textAlign='center';x.fillStyle='#3f3f3f';x.fillText(s,X+sz/8,Y+sz/8);x.fillStyle=col;x.fillText(s,X,Y)}
 function tile(t,X,Y,w,h){for(let i=0;i<w;i+=16)for(let j=0;j<h;j+=16)x.drawImage(t,0,0,Math.min(16,w-i),Math.min(16,h-j),X+i,Y+j,Math.min(16,w-i),Math.min(16,h-j))}
 const SKINS=['Chicken','Pig','Steve','Creeper'];
@@ -101,17 +101,18 @@ if(state=='play')txt(score,W/2,100,36);ui();
 }
 const $=i=>document.getElementById(i);
 function ui(){$('sc').textContent=score;$('bst').textContent='Best '+best;$('start').style.display=state=='start'?'block':'none';$('over').style.display=state=='over'&&fr>30?'block':'none';$('os').textContent='Score: '+score;$('ob').textContent='Best: '+best}
-for(const id of['start','over','set','gear'])$(id).addEventListener('pointerdown',e=>e.stopPropagation());
-$('pb').onclick=()=>flap();$('rb').onclick=()=>{flap();flap()};
+for(const id of['start','over','set','gear','nav'])$(id).addEventListener('pointerdown',e=>e.stopPropagation());
+function tap(el,fn){let last=0;const h=e=>{e.stopPropagation();if(e.cancelable&&e.type!='click')e.preventDefault();const n=Date.now();if(n-last<300)return;last=n;try{sfx('click')}catch(_){}try{fn(e)}catch(err){console.error(err)}};el.addEventListener('pointerup',h);el.addEventListener('touchend',h);el.addEventListener('click',h)}
+tap($('pb'),()=>{if(state!='play'){state='start';reset();flap()}});tap($('rb'),()=>{state='start';reset();fr=0;flap()});
 function apply(){localStorage.setItem('mcflapCfg',JSON.stringify(cfg));$('snd').classList.toggle('offs',!cfg.sound);[...$('skins').children].forEach((r,i)=>r.classList.toggle('sel',i==cfg.skin))}
-SKINS.forEach((n,i)=>{const r=document.createElement('div');r.className='cell sk';const cv=document.createElement('canvas');cv.width=cv.height=40;const g=cv.getContext('2d');g.translate(19,22);drawSkin(g,i,0);const nm=document.createElement("span");nm.style.flex="1";nm.textContent=n;r.append(cv,nm);const ck=document.createElement('span');ck.className='ck';ck.textContent='\u2714';r.append(ck);r.onclick=()=>{cfg.skin=i;apply()};$('skins').append(r)});
-$('snd').onclick=()=>{cfg.sound=!cfg.sound;apply()};
-$('rs').onclick=()=>{if(confirm('Reset best score?')){best=0;localStorage.removeItem('mcflapBest')}};
-$('gear').onclick=e=>{e.stopPropagation();paused=true;$('set').style.display='block'};
-$('done').onclick=e=>{e.stopPropagation();paused=false;$('set').style.display='none'};
+SKINS.forEach((n,i)=>{const r=document.createElement('div');r.className='cell sk';const cv=document.createElement('canvas');cv.width=cv.height=40;const g=cv.getContext('2d');g.translate(19,22);drawSkin(g,i,0);const nm=document.createElement("span");nm.style.flex="1";nm.textContent=n;r.append(cv,nm);const ck=document.createElement('span');ck.className='ck';ck.textContent='\u2714';r.append(ck);tap(r,()=>{cfg.skin=i;apply()});$('skins').append(r)});
+tap($('snd'),()=>{cfg.sound=!cfg.sound;apply()});
+tap($('rs'),()=>{if(confirm('Reset best score?')){best=0;localStorage.removeItem('mcflapBest')}});
+tap($('gear'),()=>{paused=true;$('set').style.display='block'});
+tap($('done'),()=>{paused=false;$('set').style.display='none'});
 addEventListener('keydown',e=>{if(paused)e.stopImmediatePropagation()},true);
 (()=>{const g=$('gc').getContext('2d');g.translate(10,10);g.fillStyle='#fff';g.shadowColor='rgba(0,0,0,.5)';g.shadowOffsetY=-1;g.beginPath();for(let i=0;i<16;i++){const a=i*Math.PI/8,r=(i%2?6:9);g.lineTo(Math.cos(a-.2)*r,Math.sin(a-.2)*r);g.lineTo(Math.cos(a+.2)*r,Math.sin(a+.2)*r)}g.closePath();g.arc(0,0,3,0,7,true);g.fill('evenodd')})();
-for(const id of['gear','done','pb','rb','snd','rs'])$(id).addEventListener('click',()=>sfx('click'),true);$('skins').addEventListener('click',()=>sfx('click'),true);
+
 apply();
 step();
 </script></body></html>
