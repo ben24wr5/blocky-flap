@@ -100,7 +100,7 @@ if(state=='play')txt(score,W/2,100,36);ui();
 
 }
 const $=i=>document.getElementById(i);
-function ui(){$('sc').textContent=score;$('bst').textContent='Best '+best;$('start').style.display=state=='start'?'block':'none';$('over').style.display=state=='over'&&fr>30?'block':'none';$('os').textContent='Score: '+score;$('ob').textContent='Best: '+best}
+function ui(){$('sc').textContent=score;$('bst').textContent='Best '+best;$('start').style.display=state=='start'?'block':'none';$('over').style.display=state=='over'&&fr>30&&$('set').style.display!='block'?'block':'none';$('os').textContent='Score: '+score;$('ob').textContent='Best: '+best}
 for(const id of['start','over','set','gear','nav'])$(id).addEventListener('pointerdown',e=>e.stopPropagation());
 function tap(el,fn){let last=0;const h=e=>{e.stopPropagation();if(e.cancelable&&e.type!='click')e.preventDefault();const n=Date.now();if(n-last<300)return;last=n;try{sfx('click')}catch(_){}try{fn(e)}catch(err){console.error(err)}};el.addEventListener('pointerup',h);el.addEventListener('touchend',h);el.addEventListener('click',h)}
 tap($('pb'),()=>{if(state!='play'){state='start';reset();flap()}});tap($('rb'),()=>{state='start';reset();fr=0;flap()});
@@ -108,8 +108,8 @@ function apply(){localStorage.setItem('mcflapCfg',JSON.stringify(cfg));$('snd').
 SKINS.forEach((n,i)=>{const r=document.createElement('div');r.className='cell sk';const cv=document.createElement('canvas');cv.width=cv.height=40;const g=cv.getContext('2d');g.translate(19,22);drawSkin(g,i,0);const nm=document.createElement("span");nm.style.flex="1";nm.textContent=n;r.append(cv,nm);const ck=document.createElement('span');ck.className='ck';ck.textContent='\u2714';r.append(ck);tap(r,()=>{cfg.skin=i;apply()});$('skins').append(r)});
 tap($('snd'),()=>{cfg.sound=!cfg.sound;apply()});
 tap($('rs'),()=>{if(confirm('Reset best score?')){best=0;localStorage.removeItem('mcflapBest')}});
-tap($('gear'),()=>{paused=true;$('set').style.display='block'});
-tap($('done'),()=>{paused=false;$('set').style.display='none'});
+tap($('gear'),()=>{paused=true;$('set').style.display='block';ui()});
+tap($('done'),()=>{paused=false;$('set').style.display='none';ui()});
 addEventListener('keydown',e=>{if(paused)e.stopImmediatePropagation()},true);
 (()=>{const g=$('gc').getContext('2d');g.translate(10,10);g.fillStyle='#fff';g.shadowColor='rgba(0,0,0,.5)';g.shadowOffsetY=-1;g.beginPath();for(let i=0;i<16;i++){const a=i*Math.PI/8,r=(i%2?6:9);g.lineTo(Math.cos(a-.2)*r,Math.sin(a-.2)*r);g.lineTo(Math.cos(a+.2)*r,Math.sin(a+.2)*r)}g.closePath();g.arc(0,0,3,0,7,true);g.fill('evenodd')})();
 
