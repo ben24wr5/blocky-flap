@@ -12,6 +12,7 @@ A Minecraft-style Flappy Bird game in a single HTML file, with a classic iOS 6-s
 - **iOS 6-style interface:** glossy blue navigation bar, linen-textured start card, glossy buttons and a "You Died!" alert box.
 - **4 bird skins:** Chicken (default), Pig, Steve and Creeper. Pick one in ⚙️ Settings → Bird.
 - **Home Screen icon:** set automatically, showing all four characters on a day-to-night Minecraft scene.
+- **10 background themes:** Overworld Day (default), Overworld Night, Sunset, Desert, Snowy Tundra, Jungle, Ocean Beach, Cave, Nether and The End, each with matching pipes and ground, parallax scenery and effects. Pick one in ⚙️ Settings → Background.
 - **Sound effects:** wing flap, point ding, hit, button clicks and a death sound for each skin (cluck, oink, oof, and a Creeper hiss and boom). Turn them off in Settings.
 - **Best score saved** on your device, plus a Reset Best Score option.
 - Works on iPhone and desktop. Tap, click or press Space to flap.
