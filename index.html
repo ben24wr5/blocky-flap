@@ -120,7 +120,7 @@ let g=bgC.getContext('2d');g.imageSmoothingEnabled=false;const gr=g.createLinear
 const f=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRect(a,b,w,h)};
 if(TH.st)for(let i=0;i<70;i++){const z=r()<.2?3:2;f(Math.floor(r()*W),Math.floor(r()*GY*.8),z,z,TH.pillars&&r()<.4?'#d8b4ff':'#fff')}
 if(TH.moon){f(214,40,36,36,'#f4f1d8');f(222,48,8,8,'#d8d4b4');f(236,62,6,6,'#d8d4b4')}
-if(TH.sun){f(200,TH.n=='Sunset'?250:40,40,40,TH.sun);f(206,(TH.n=='Sunset'?250:40)+6,28,28,TH.n=='Sunset'?'#ff9a5a':'#ffffd0')}
+if(TH.sun){if(TH.n=='Sunset'){const sx=196,sy=130;f(sx-12,sy-4,64,48,'rgba(255,190,90,.25)');f(sx-4,sy-12,48,64,'rgba(255,190,90,.25)');f(sx-6,sy+2,52,36,'rgba(255,220,120,.35)');f(sx+2,sy-6,36,52,'rgba(255,220,120,.35)');f(sx,sy,40,40,'#ffd24a');f(sx+6,sy+6,28,28,'#ffe27a');f(sx+6,sy+6,8,8,'#fff6c0')}else{f(200,40,40,40,TH.sun);f(206,46,28,28,'#ffffd0')}}
 if(TH.pillars){f(220,60,30,30,'#e8f0c8');f(226,66,18,18,'#c8d0a0')}
 g=plC.getContext('2d');g.clearRect(0,0,W,H);g.imageSmoothingEnabled=false;
 const h=(a,b,w,hh,c)=>{g.fillStyle=c;g.fillRect(a,b,w,hh)};
