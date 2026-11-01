@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="apple-mobile-web-app-capable" content="yes"><title>Blocky Flap</title>
-<style>html,body{margin:0;height:100%;background:#000;overflow:hidden;touch-action:none}canvas{display:block;margin:0 auto;image-rendering:pixelated}#wrap{position:relative;margin:0 auto}#wrap canvas{width:100%;height:100%}
+<style>html,body{margin:0;width:100vw;height:100%;height:100dvh;position:fixed;inset:0;background:#000;overflow:hidden;touch-action:none}canvas{display:block;margin:0 auto;image-rendering:pixelated}#wrap{position:relative;margin:0 auto}#wrap canvas{width:100%;height:100%}
 .ui{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
 #nav{position:absolute;top:0;left:0;right:0;height:44px;background:linear-gradient(#b0bccd,#8a9bb4 50%,#7f92ae 50%,#6d83a2);border-bottom:1px solid #2d3642;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 1px 3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:19px;text-shadow:0 -1px 0 rgba(0,0,0,.5)}
 #sc{position:absolute;right:8px;top:7px;padding:5px 10px;border-radius:5px;font-size:13px;background:linear-gradient(#8ea4c4,#4a6b9e 50%,#3a5d93 50%,#3f639a);border:1px solid #2a3c58;box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 1px 0 rgba(255,255,255,.3)}
@@ -35,7 +35,8 @@
 <div class="gh">Data</div><div class="grp"><div class="cell rst" id="rs">Reset Best Score</div></div></div>
 <div id="over" class="panel"><h2>You Died!</h2><p id="os"></p><p id="ob"></p><button class="btn" id="rb">Respawn</button></div></div><script>
 const W=288,H=512,c=document.getElementById('c'),x=c.getContext('2d');c.width=W;c.height=H;x.imageSmoothingEnabled=false;
-function fit(){const s=Math.min(innerWidth/W,innerHeight/H);const w=document.getElementById('wrap');w.style.width=W*s+'px';w.style.height=H*s+'px';w.style.top=(innerHeight-H*s)/2+'px'}addEventListener('resize',fit);fit();
+(()=>{let m=document.querySelector('meta[name=viewport]');if(!m){m=document.createElement('meta');m.name='viewport';document.head.appendChild(m)}m.content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover'})();
+function fit(){const d=document.documentElement,v=window.visualViewport;let vw=Math.min(d.clientWidth||innerWidth,innerWidth),vh=Math.min(d.clientHeight||innerHeight,innerHeight);if(v){vw=Math.min(vw,v.width);vh=Math.min(vh,v.height)}const s=Math.min(vw/W,vh/H);const w=document.getElementById('wrap');w.style.position='fixed';w.style.left=(vw-W*s)/2+'px';w.style.margin='0';w.style.width=W*s+'px';w.style.height=H*s+'px';w.style.top=(vh-H*s)/2+'px'}addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,200));addEventListener('load',fit);window.visualViewport&&visualViewport.addEventListener('resize',fit);fit();[50,300,1000,2500].forEach(t=>setTimeout(fit,t));
 let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
 function tex(f){const t=document.createElement('canvas');t.width=t.height=16;const g=t.getContext('2d');for(let i=0;i<16;i++)for(let j=0;j<16;j++){g.fillStyle=f(i,j);g.fillRect(i,j,1,1)}return t}
 const pick=a=>a[Math.floor(rnd()*a.length)];
