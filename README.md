@@ -2,11 +2,9 @@
 
 A Minecraft-style Flappy Bird game in a single HTML file, with a classic iOS 6-style interface.
 
-## [▶ Play Blocky Flap](https://raw.githack.com/ben24wr5/blocky-flap/main/index.html)
+## [▶ Play Blocky Flap](https://htmlpreview.github.io/?https://github.com/ben24wr5/blocky-flap/blob/main/index.html)
 
-**https://raw.githack.com/ben24wr5/blocky-flap/main/index.html**
-
-> The first time you open the link, you'll see a "One more step" page from the free host. Tap the red **Open the page** button and the game will load.
+**https://htmlpreview.github.io/?https://github.com/ben24wr5/blocky-flap/blob/main/index.html**
 
 ## Features
 
@@ -19,7 +17,7 @@ A Minecraft-style Flappy Bird game in a single HTML file, with a classic iOS 6-s
 
 ## Add to Home Screen (iPhone)
 
-1. Open the play link in **Safari** and tap **Open the page**.
+1. Open the play link in **Safari**.
 2. Tap the **Share** button (the square with an arrow pointing up).
 3. Scroll down and tap **Add to Home Screen**, then tap **Add**.
 4. Blocky Flap now has its own icon on your Home Screen.
