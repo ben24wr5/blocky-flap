@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="apple-mobile-web-app-capable" content="yes"><title>Blocky Flap</title>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Blocky Flap"><meta name="mobile-web-app-capable" content="yes"><title>Blocky Flap</title>
 <style>html,body{margin:0;width:100vw;height:100%;height:100dvh;position:fixed;inset:0;background:#000;overflow:hidden;touch-action:none}canvas{display:block;margin:0 auto;image-rendering:pixelated}#wrap{position:relative;margin:0 auto}#wrap canvas{width:100%;height:100%}
 .ui{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
 #nav{position:absolute;top:0;left:0;right:0;height:44px;background:linear-gradient(#b0bccd,#8a9bb4 50%,#7f92ae 50%,#6d83a2);border-bottom:1px solid #2d3642;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 1px 3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:19px;text-shadow:0 -1px 0 rgba(0,0,0,.5)}
@@ -27,11 +27,12 @@
 .sw .off{width:65px;background:linear-gradient(#e9e9e9,#fff);color:#777;text-align:center;line-height:26px;text-shadow:0 1px 0 #fff}
 .sw .kn{width:26px;height:26px;border-radius:50%;margin:0 -13px;position:relative;z-index:2;background:linear-gradient(#cfcfcf,#fdfdfd);box-shadow:0 0 2px rgba(0,0,0,.5)}
 .sw.offs .tr{left:-52px}
-.sk{cursor:pointer;text-align:left;justify-content:flex-start;gap:12px}#wrap .sk canvas{width:40px;height:40px;flex:none;margin:0;image-rendering:pixelated;border-radius:6px;background:#9cc0ff}.sk .ck{color:#3a62b5;font-size:20px;visibility:hidden}.sk.sel{color:#3a62b5}.sk.sel .ck{visibility:visible}.rst{justify-content:center;color:#c0262b;cursor:pointer}#nav{z-index:5}#over,#start{z-index:4}#set{z-index:10}#gear{z-index:6;touch-action:manipulation;-webkit-tap-highlight-color:transparent}#gc{pointer-events:none}</style></head><body><div id="wrap" class="ui"><canvas id="c"></canvas><div id="nav"><span id="bst"></span><button id="gear" aria-label="Settings"><canvas id="gc" width="20" height="20" style="width:20px;height:20px"></canvas></button>Blocky Flap<span id="sc">0</span></div>
+.sk{cursor:pointer;text-align:left;justify-content:flex-start;gap:12px}#wrap .sk canvas{width:40px;height:40px;flex:none;margin:0;image-rendering:pixelated;border-radius:6px;background:#9cc0ff}.sk .ck{color:#3a62b5;font-size:20px;visibility:hidden}.sk.sel{color:#3a62b5}.sk.sel .ck{visibility:visible}#icons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px}.ic{position:relative;cursor:pointer;border-radius:10px;overflow:hidden;border:2px solid transparent;aspect-ratio:1}.ic.sel{border-color:#3a62b5;box-shadow:0 0 0 1px #fff,0 0 6px #3a62b5}#wrap .ic canvas{width:100%;height:100%;display:block}.rst{justify-content:center;color:#c0262b;cursor:pointer}#nav{z-index:5}#over,#start{z-index:4}#set{z-index:10}#gear{z-index:6;touch-action:manipulation;-webkit-tap-highlight-color:transparent}#gc{pointer-events:none}</style></head><body><div id="wrap" class="ui"><canvas id="c"></canvas><div id="nav"><span id="bst"></span><button id="gear" aria-label="Settings"><canvas id="gc" width="20" height="20" style="width:20px;height:20px"></canvas></button>Blocky Flap<span id="sc">0</span></div>
 <div id="start" class="panel"><h1>Blocky Flap</h1><p>Tap, click or press Space to flap.<br>Dodge the blocks!</p><button class="btn" id="pb">Play</button></div>
 <div id="set"><div class="bar">Settings<button id="done">Done</button></div>
 <div class="gh">Game</div><div class="grp"><div class="cell">Sound<div class="sw" id="snd"><div class="tr"><div class="on">ON</div><div class="kn"></div><div class="off">OFF</div></div></div></div></div>
 <div class="gh">Bird</div><div class="grp" id="skins"></div>
+<div class="gh">App Icon</div><div class="grp" id="icons"></div><div class="gh" style="font-size:12px;font-weight:normal;margin-top:6px">Pick an icon, then in Safari tap Share &rarr; Add to Home Screen (remove and re-add to change it).</div>
 <div class="gh">Data</div><div class="grp"><div class="cell rst" id="rs">Reset Best Score</div></div></div>
 <div id="over" class="panel"><h2>You Died!</h2><p id="os"></p><p id="ob"></p><button class="btn" id="rb">Respawn</button></div></div><script>
 const W=288,H=512,c=document.getElementById('c'),x=c.getContext('2d');c.width=W;c.height=H;x.imageSmoothingEnabled=false;
@@ -45,7 +46,7 @@ const dirt=tex(()=>pick(DIRT)),stone=tex(()=>pick(ST)),grass=tex((i,j)=>j<3||(j<
 const cob=tex((i,j)=>(i%8==0||j%6==0)&&rnd()<.7?'#4a4a4a':pick(ST));
 const leaf=tex(()=>rnd()<.15?'#2a4a12':pick(GR));
 let cfg=Object.assign({sound:true,skin:0},JSON.parse(localStorage.getItem('mcflapCfg')||'{}')),paused=false;
-let best=+localStorage.getItem('mcflapBest')||0,state='start',bird,pipes,score,fr=0,gx=0,clouds=[];
+cfg.icon=cfg.icon|0;let best=+localStorage.getItem('mcflapBest')||0,state='start',bird,pipes,score,fr=0,gx=0,clouds=[];
 for(let i=0;i<5;i++)clouds.push({x:rnd()*W,y:20+rnd()*150,w:3+Math.floor(rnd()*4)});
 let ac;window.__sfxLog=[];
 const SFX=(()=>{let nb=new WeakMap();
@@ -105,8 +106,21 @@ function ui(){$('sc').textContent=score;$('bst').textContent='Best '+best;$('sta
 for(const id of['start','over','set','gear','nav'])$(id).addEventListener('pointerdown',e=>e.stopPropagation());
 function tap(el,fn){let last=0;const h=e=>{e.stopPropagation();if(e.cancelable&&e.type!='click')e.preventDefault();const n=Date.now();if(n-last<300)return;last=n;try{sfx('click')}catch(_){}try{fn(e)}catch(err){console.error(err)}};el.addEventListener('pointerup',h);el.addEventListener('touchend',h);el.addEventListener('click',h)}
 tap($('pb'),()=>{if(state!='play'){state='start';reset();flap()}});tap($('rb'),()=>{state='start';reset();fr=0;ui()});
-function apply(){localStorage.setItem('mcflapCfg',JSON.stringify(cfg));$('snd').classList.toggle('offs',!cfg.sound);[...$('skins').children].forEach((r,i)=>r.classList.toggle('sel',i==cfg.skin))}
+function apply(){localStorage.setItem('mcflapCfg',JSON.stringify(cfg));$('snd').classList.toggle('offs',!cfg.sound);[...$('skins').children].forEach((r,i)=>r.classList.toggle('sel',i==cfg.skin));[...$('icons').children].forEach((r,i)=>r.classList.toggle('sel',i==cfg.icon))}
 SKINS.forEach((n,i)=>{const r=document.createElement('div');r.className='cell sk';const cv=document.createElement('canvas');cv.width=cv.height=40;const g=cv.getContext('2d');g.translate(19,22);drawSkin(g,i,0);const nm=document.createElement("span");nm.style.flex="1";nm.textContent=n;r.append(cv,nm);const ck=document.createElement('span');ck.className='ck';ck.textContent='\u2714';r.append(ck);tap(r,()=>{cfg.skin=i;apply()});$('skins').append(r)});
+
+const BGS=['Sky','Grass','Pipes','Night'];
+function drawIcon(g,k,bg){const S=180;g.imageSmoothingEnabled=false;let sd=11+bg;const r=()=>(sd=(sd*16807)%2147483647)/2147483647;const f=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRect(a,b,w,h)};
+const sky=()=>{const gr=g.createLinearGradient(0,0,0,S);gr.addColorStop(0,'#78a7ff');gr.addColorStop(1,'#bcd4ff');g.fillStyle=gr;g.fillRect(0,0,S,S)};
+if(bg==0){sky();f(12,24,60,12,'#fff');f(24,12,36,12,'#fff');f(108,132,60,12,'#fff');f(120,120,36,12,'#fff');f(130,30,40,10,'#fff')}
+else if(bg==1){for(let i=0;i<S;i+=45)for(let j=0;j<S;j+=45)g.drawImage(j<45?grass:dirt,i,j,45,45);f(0,0,S,3,'rgba(255,255,255,.25)')}
+else if(bg==2){sky();f(30,40,36,8,'#fff');f(40,32,18,8,'#fff');const pp=(px,top,bot)=>{f(px,0,30,top,'#3f8f2a');f(px+4,0,6,top,'#6cc04a');f(px-4,top-10,38,10,'#2f7a1e');f(px-4,top-10,38,2,'#6cc04a');f(px,S-bot,30,bot,'#3f8f2a');f(px+4,S-bot,6,bot,'#6cc04a');f(px-4,S-bot,38,10,'#2f7a1e');f(px-4,S-bot,38,2,'#6cc04a')};pp(-14,50,60);pp(150,70,40);for(let i=0;i<S;i+=18)g.drawImage(grass,i,162,18,18)}
+else{const gr=g.createLinearGradient(0,0,0,S);gr.addColorStop(0,'#05081c');gr.addColorStop(1,'#1c2a5a');g.fillStyle=gr;g.fillRect(0,0,S,S);for(let i=0;i<40;i++){const z=r()<.2?4:2;f(Math.floor(r()*S),Math.floor(r()*S),z,z,r()<.5?'#fff':'#cfd8ff')}f(130,14,32,32,'#f4f1d8');f(136,20,8,8,'#d8d4b4');f(148,32,6,6,'#d8d4b4')}
+g.save();g.translate(84,98);g.scale(4,4);drawSkin(g,k,0);g.restore()}
+function iconURL(k,bg){const cv=document.createElement('canvas');cv.width=cv.height=180;drawIcon(cv.getContext('2d'),k,bg);return cv.toDataURL('image/png')}
+function setIcon(){const i=cfg.icon|0,u=iconURL(i>>2,i&3);for(const rel of['apple-touch-icon','icon']){document.querySelectorAll('link[rel="'+rel+'"]').forEach(l=>l.remove());const l=document.createElement('link');l.rel=rel;if(rel=='icon')l.type='image/png';l.sizes='180x180';l.href=u;document.head.appendChild(l)}}
+for(let k=0;k<4;k++)for(let bg=0;bg<4;bg++){const n=k*4+bg,d=document.createElement('div');d.className='ic';d.title=SKINS[k]+' / '+BGS[bg];const cv=document.createElement('canvas');cv.width=cv.height=180;drawIcon(cv.getContext('2d'),k,bg);d.append(cv);tap(d,()=>{cfg.icon=n;apply();setIcon()});$('icons').append(d)}
+setIcon();
 tap($('snd'),()=>{cfg.sound=!cfg.sound;apply()});
 tap($('rs'),()=>{if(confirm('Reset best score?')){best=0;localStorage.removeItem('mcflapBest')}});
 tap($('gear'),()=>{paused=true;$('set').style.display='block';ui()});
