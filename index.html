@@ -104,7 +104,7 @@ const $=i=>document.getElementById(i);
 function ui(){$('sc').textContent=score;$('bst').textContent='Best '+best;$('start').style.display=state=='start'?'block':'none';$('over').style.display=state=='over'&&fr>30&&$('set').style.display!='block'?'block':'none';$('os').textContent='Score: '+score;$('ob').textContent='Best: '+best}
 for(const id of['start','over','set','gear','nav'])$(id).addEventListener('pointerdown',e=>e.stopPropagation());
 function tap(el,fn){let last=0;const h=e=>{e.stopPropagation();if(e.cancelable&&e.type!='click')e.preventDefault();const n=Date.now();if(n-last<300)return;last=n;try{sfx('click')}catch(_){}try{fn(e)}catch(err){console.error(err)}};el.addEventListener('pointerup',h);el.addEventListener('touchend',h);el.addEventListener('click',h)}
-tap($('pb'),()=>{if(state!='play'){state='start';reset();flap()}});tap($('rb'),()=>{state='start';reset();fr=0;flap()});
+tap($('pb'),()=>{if(state!='play'){state='start';reset();flap()}});tap($('rb'),()=>{state='start';reset();fr=0;ui()});
 function apply(){localStorage.setItem('mcflapCfg',JSON.stringify(cfg));$('snd').classList.toggle('offs',!cfg.sound);[...$('skins').children].forEach((r,i)=>r.classList.toggle('sel',i==cfg.skin))}
 SKINS.forEach((n,i)=>{const r=document.createElement('div');r.className='cell sk';const cv=document.createElement('canvas');cv.width=cv.height=40;const g=cv.getContext('2d');g.translate(19,22);drawSkin(g,i,0);const nm=document.createElement("span");nm.style.flex="1";nm.textContent=n;r.append(cv,nm);const ck=document.createElement('span');ck.className='ck';ck.textContent='\u2714';r.append(ck);tap(r,()=>{cfg.skin=i;apply()});$('skins').append(r)});
 tap($('snd'),()=>{cfg.sound=!cfg.sound;apply()});
